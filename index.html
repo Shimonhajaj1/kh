@@ -80,9 +80,91 @@
       border-radius: 16px;
       background: #000;
     }
+    /* Styles for multiple images (for 'tikshuv' page) */
+    .image-grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px; /* Space between images */
+      margin: 32px 0;
+    }
+    .image-grid img {
+      width: 85vw;
+      max-width: 350px; /* Same max-width as main-img */
+      border-radius: 18px; /* Consistent border-radius */
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08); /* Consistent shadow */
+    }
+
+    /* New styles for unit information boxes */
+    .unit-section-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px; /* Space between sections */
+        margin: 32px 0;
+        padding: 0 15px; /* Added horizontal padding for smaller screens */
+    }
+
+    .unit-info-box {
+        background: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 25px; /* הגדלתי את הריפוד הפנימי */
+        width: 85vw;
+        max-width: 500px; /* Max width for consistency with video/iframe */
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        text-align: right; /* Align text to the right for RTL */
+        min-height: 120px; /* הוספתי גובה מינימלי לריבוע */
+        box-sizing: border-box; /* לוודא שה-padding לא יגדיל את הגודל הכולל מעבר ל-max-width */
+    }
+
+    .unit-info-box h3 {
+        color: #333;
+        font-size: 1.2em;
+        margin-top: 0;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #2a6cff; /* A blue line under the title */
+        padding-bottom: 8px;
+    }
+    .unit-info-box p {
+        color: #555;
+        line-height: 1.6;
+        font-size: 0.95em;
+        /* הגדלתי את השוליים התחתונים של הפסקה כדי ליצור יותר מרווח אם יהיה רק מעט טקסט */
+        margin-bottom: 15px;
+    }
+
+    /* --- New styles for main-content background --- */
+    #main-content {
+      position: relative; /* Needed for absolute positioning of pseudo-element */
+      overflow: hidden; /* Ensures content doesn't spill out if background is large */
+      min-height: 50vh; /* Ensure there's enough height for background to be seen */
+    }
+
+    #main-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: var(--unit-bg-image, none); /* Use CSS variable, default to none */
+      background-size: contain; /* Or 'cover' depending on desired effect */
+      background-repeat: no-repeat;
+      background-position: center center;
+      opacity: 0.05; /* Adjust for desired subtlety */
+      z-index: -1; /* Place behind content */
+      pointer-events: none; /* Allows clicks on content above */
+      transition: background-image 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Smooth transition */
+    }
+
+
     @media (max-width: 400px) {
-      .main-img, video, iframe {
+      .main-img, video, iframe, .image-grid img, .unit-info-box {
         max-width: 98vw;
+      }
+      .unit-section-container {
+        padding: 0 5px; /* Less padding on very small screens */
       }
     }
     /* --- Drawer styles --- */
@@ -197,8 +279,9 @@
 <body>
   <div class="header">
     <button class="menu-btn" aria-label="תפריט" onclick="openDrawer()">☰</button>
-    <div class="logo-container"> <a href="#" onclick="showPage('home'); return false;">
-        <img src="logo.png" alt="לוגו" class="logo">
+    <div class="logo-container">
+      <a href="#" onclick="showPage('home'); return false;">
+        <img src="logo.png" alt="לוגו" class="logo" id="header-logo">
       </a>
     </div>
   </div>
@@ -241,16 +324,7 @@
   </nav>
 
   <div id="main-content">
-    <div class="main-text">בונים ערך - מובילים דרך</div>
-    <div class="main-img-link">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLScXZaFGxVH75YVr_uKBnFj2KpgpLz_pgOGFZESSqo_8ldO9jg/viewform?usp=header" target="_blank">
-        <img src="php.jpg" alt="תמונה ראשית" class="main-img">
-      </a>
     </div>
-    <div class="video-container">
-      <video controls src="serhp.mp4"></video>
-    </div>
-  </div>
 
   <script>
     // Drawer open/close
@@ -270,44 +344,148 @@
       btn.setAttribute('aria-expanded', !expanded);
       submenu.style.display = expanded ? 'none' : 'block';
     }
+
+    // --- מבנה נתונים עבור תוכן היחידות ---
+    const unitsContent = {
+        'unit_mifkada': {
+            displayName: 'מפקדה',
+            logo: 'logo.png', // הוספת נתיב הלוגו הספציפי
+            about: 'המפקדה אחראית על ניהול ותיאום כלל הפעילות בקריית ההדרכה. היא מהווה את הגוף המתכלל שמבטיח תפקוד יעיל ורציף של כל היחידות תחת פיקודה, תוך דגש על תכנון אסטרטגי וביצוע משימות ביעילות מרבית.',
+            activity: 'תחומי פעילות המפקדה כוללים תכנון מבצעי ואדמיניסטרטיבי, ניהול משאבי אנוש, פיקוח על לוחות זמנים, וקביעת מדיניות כוללת. המפקדה פועלת ללא הפסקה כדי להבטיח את הצלחת משימות ההדרכה והתפעול.',
+            staff: 'סגל המפקדה מורכב מקצינים, נגדים וחיילים ממגוון חילות, בעלי ניסיון רב בתחומים שונים. הם פועלים בשיתוף פעולה הדוק כדי להוביל את הקריה ולהבטיח את רווחת המשרתים.'
+        },
+        'unit6': {
+            displayName: 'בה"ד 6',
+            logo: 'b6.png', // הוספת נתיב הלוגו הספציפי
+            about: 'בה"ד 6 הוא בית הספר ללוגיסטיקה, הכשרה ותחזוקה. הוא מכשיר את הדור הבא של קצינים, נגדים וחיילים במקצועות הלוגיסטיקה, התחזוקה והתחבורה, החיוניים לתמיכה בצה"ל.',
+            activity: 'הפעילות בבה"ד 6 כוללת קורסים והכשרות מתקדמות בתחומי אספקה, חימוש, דלק, וניהול ציוד. בית הספר שם דגש על למידה מעשית וסימולציות מציאותיות.',
+            staff: 'סגל בה"ד 6 מורכב ממדריכים ומפקדים מנוסים, בעלי ידע עמוק בתחומי הלוגיסטיקה והתחזוקה. הם מחויבים להעניק למתאמנים את הכלים הטובים ביותר להצלחה.'
+        },
+        'unit7': {
+            displayName: 'בה"ד 7',
+            logo: 'b7.png', // הוספת נתיב הלוגו הספציפי
+            about: 'בה"ד 7 הוא בית הספר לתקשוב, המכשיר את אנשי המקצוע בתחום התקשורת, המחשבים והסייבר. הוא חיוני לשמירה על עליונות טכנולוגית של צה"ל.',
+            activity: 'הכשרות בבה"ד 7 כוללות תכנות, ניהול רשתות, אבטחת מידע, ומערכות תקשוב מתקדמות. הדגש הוא על חדשנות ופתרונות טכנולוגיים פורצי דרך.',
+            staff: 'סגל בה"ד 7 מורכב ממומחי תקשוב ומדריכים טכנולוגיים מובילים, המעודכנים בחידושים האחרונים בתחום. הם משלבים ידע תיאורטי עם ניסיון מעשי עשיר.'
+        },
+        'unit10': {
+            displayName: 'בה"ד 10',
+            logo: 'b10.png', // הוספת נתיב הלוגו הספציפי
+            about: 'בה"ד 10 הוא בית הספר לרפואה, האחראי על הכשרת כוח האדם הרפואי בצה"ל. כאן מוכשרים חובשים, פרמדיקים, אחים ואחיות, וצוותי רפואה נוספים.',
+            activity: 'הפעילות מתמקדת בלימוד תיאורטי ומעשי של עזרה ראשונה, רפואת חירום, פינוי נפגעים, ומיומנויות טיפול מתקדמות. כולל תרגילי שטח וסימולציות.',
+            staff: 'סגל בה"ד 10 מורכב מרופאים, פרמדיקים, אחיות וחובשים קרביים מנוסים, המעבירים את הידע והניסיון שלהם לדור הבא של המטפלים הצבאיים.'
+        },
+        'unit11': {
+            displayName: 'בה"ד 11',
+            logo: 'b11.png', // הוספת נתיב הלוגו הספציפי
+            about: 'בה"ד 11 הוא בית הספר למשאבי אנוש וניהול. הוא מכשיר קציני ונגדי שלישות, מפקדי ת"ש, וכלל המקצועות הקשורים לניהול כוח אדם ורווחת הפרט בצה"ל.',
+            activity: 'הכשרות בבה"ד 11 עוסקות בתחומי ניהול פרט, דיני שירות, פסיכולוגיה צבאית, ניהול קריירה ושיטות פיקוד. דגש רב ניתן למיומנויות בין-אישיות.',
+            staff: 'סגל בה"ד 11 מורכב ממפקדים ומדריכים בעלי ניסיון רב בתחומי השלישות, הת"ש והניהול. הם מסייעים למתאמנים לפתח יכולות מנהיגות וטיפול בפרט.'
+        },
+        'unit13': {
+            displayName: 'בה"ד 13',
+            logo: 'b13.png', // הוספת נתיב הלוגו הספציפי
+            about: 'בה"ד 13 הוא בית הספר למשטרה צבאית, האחראי על הכשרת כלל מקצועות המשטרה הצבאית, כולל לוחמי מעברים, סיירים, חוקרים ועוד.',
+            activity: 'הפעילות מתמקדת באכיפת חוק וסדר, חקירות, ביטחון שוטף וטיפול בתעבורה צבאית. ההכשרה כוללת תרגילים מעשיים בשטח ולימוד חוקים ותקנות.',
+            staff: 'סגל בה"ד 13 מורכב מקציני ונגדי משטרה צבאית מנוסים, המעבירים את הידע והניסיון שלהם תוך שמירה על ערכי המקצוע וטוהר המידות.'
+        },
+        'unit20': {
+            displayName: 'בה"ד 20',
+            logo: 'b20.png', // הוספת נתיב הלוגו הספציפי
+            about: 'בה"ד 20 הוא בית הספר למערך הטכני של חיל האוויר, המכשיר את כוח האדם הטכני לתחזוקה ותפעול מערכות כלי הטיס וציוד קרקע אווירי.',
+            activity: 'ההכשרות כוללות לימוד מעמיק של מערכות אוויוניקה, מכונאות מטוסים, מערכות חשמל, בקרת ירי ועוד. דגש על בטיחות ודיוק.',
+            staff: 'סגל בה"ד 20 מורכב מטכנאים, מהנדסים ומדריכים בעלי התמחות ספציפית בתחומי התעופה והמערכות הטכניות של חיל האוויר.'
+        },
+        'unit_hinuch': {
+            displayName: 'בה"ד חינוך',
+            logo: 'bh.png', // הוספת נתיב הלוגו הספציפי
+            about: 'בה"ד חינוך (בית הספר לחינוך) מכשיר את קציני ונגדי החינוך והמשא"ן בצה"ל. הוא אחראי על פיתוח תכני חינוך, ערכים, והעשרת הידע בקרב חיילים.',
+            activity: 'הפעילות כוללת הכשרות בתחומי מנהיגות, פיתוח זהות ישראלית, לימודי מורשת, והעברת תכנים חינוכיים מגוונים. דגש על דיאלוג והעצמה.',
+            staff: 'סגל בה"ד חינוך מורכב ממפקדים ומדריכים בעלי רקע רחב בחינוך פורמלי ובלתי פורמלי, בעלי תשוקה להעביר מסרים ערכיים וחינוכיים.'
+        }
+    };
+    // --- סוף מבנה נתונים ---
+
+    // Helper function to generate unit info boxes from the data structure
+    function generateUnitContent(pageId) {
+        const unitData = unitsContent[pageId];
+        if (!unitData) {
+            return `<div class='main-text'>שגיאה: תוכן ליחידה זו אינו נמצא.</div>`;
+        }
+
+        return `
+            <div class='main-text'>${unitData.displayName}</div>
+            <div class='unit-section-container'>
+                <div class='unit-info-box'>
+                    <h3>על היחידה</h3>
+                    <p>${unitData.about}</p>
+                </div>
+                <div class='unit-info-box'>
+                    <h3>פעולת היחידה</h3>
+                    <p>${unitData.activity}</p>
+                </div>
+                <div class='unit-info-box'>
+                    <h3>סגל היחידה</h3>
+                    <p>${unitData.staff}</p>
+                </div>
+            </div>
+        `;
+    }
+
     // Show page content
     function showPage(page) {
       closeDrawer();
       let html = '';
+      const headerLogo = document.getElementById('header-logo');
+      const mainContent = document.getElementById('main-content');
+      const defaultLogoSrc = 'logo.png'; // נתיב ללוגו הכללי
+
+      // הסרת הרקע הקודם ואיפוס משתנה ה-CSS
+      mainContent.style.setProperty('--unit-bg-image', 'none');
+
+
       if(page === 'commander') {
         html = `<div style="text-align:center;margin:32px 0;"><img src="dvar.jpg" alt="דבר המפקד" style="max-width:90vw;border-radius:18px;"></div>`;
-      } else if(page === 'unit_mifkada') {
-        html = `<div class='main-text'>מפקדה</div>`;
-      } else if(page === 'unit6') {
-        html = `<div class='main-text'>בה"ד 6</div>`;
-      } else if(page === 'unit7') {
-        html = `<div class='main-text'>בה"ד 7</div>`;
-      } else if(page === 'unit10') {
-        html = `<div class='main-text'>בה"ד 10</div>`;
-      } else if(page === 'unit11') {
-        html = `<div class='main-text'>בה"ד 11</div>`;
-      } else if(page === 'unit13') {
-        html = `<div class='main-text'>בה"ד 13</div>`;
-      } else if(page === 'unit20') {
-        html = `<div class='main-text'>בה"ד 20</div>`;
-      } else if(page === 'unit_hinuch') {
-        html = `<div class='main-text'>בה"ד חינוך</div>`;
-      } else if(page === 'tikshuv') {
-        html = `<div class='main-text'>תקשוב</div>`;
+        headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
+      } else if(page.startsWith('unit')) { // Handle all unit pages using the helper function
+        html = generateUnitContent(page);
+        // שינוי הלוגו בראש הדף וגם ברקע
+        const unitData = unitsContent[page];
+        if (unitData && unitData.logo) {
+            headerLogo.src = unitData.logo;
+            mainContent.style.setProperty('--unit-bg-image', `url(${unitData.logo})`);
+        } else {
+            headerLogo.src = defaultLogoSrc; // אם אין לוגו ספציפי, חזור ללוגו הכללי
+        }
+      }
+      else if(page === 'tikshuv') {
+        html = `<div class='main-text'>תקשוב</div>
+                <div class='image-grid'>
+                  <img src="image1_for_tikshuv.jpg" alt="תמונת תקשוב 1">
+                  <img src="image2_for_tikshuv.jpg" alt="תמונת תקשוב 2">
+                </div>`;
+        headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       } else if(page === 'transport') {
-        html = `<div class='main-text'>היסעים</div>`;
+        html = `<div class='main-text'>היסעים</div><div style='padding:18px;text-align:right;'>[הכנס כאן את המידע על היסעים]</div>`;
+        headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       } else if(page === 'medicine') {
-        html = `<div class='main-text'>רפואה</div>`;
+        html = `<div class='main-text'>רפואה</div><div style='padding:18px;text-align:right;'>[הכנס כאן את המידע על רפואה]</div>`;
+        headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       } else if(page === 'food') {
-        html = `<div class='main-text'>הסעדה</div>`;
+        html = `<div class='main-text'>הסעדה</div><div style='padding:18px;text-align:right;'>[הכנס כאן את המידע על הסעדה]</div>`;
+        headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       } else if(page === 'security') {
-        html = `<div class='main-text'>בטחון מידע</div>`;
+        html = `<div class='main-text'>בטחון מידע</div><div style='padding:18px;text-align:right;'>[הכנס כאן את המידע על בטחון מידע]</div>`;
+        headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       } else if(page === 'map') {
         html = `<div style="text-align:center;margin:32px 0;"><img src="map.jpg" alt="מפת קריית ההדרכה" style="max-width:90vw;border-radius:18px;"></div>`;
+        headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       } else if(page === 'simulation') {
-        html = `<div class='video-container'><video controls src="ser.mp4" style="width:85vw;max-width:500px;"></video></div>`;
+        html = `<div class='video-container'><video controls src='ser.mp4' style="width:85vw;max-width:500px;"></video></div>`;
+        headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       } else if(page === 'rights') {
         html = `<div class='main-text'>זכויות למשרת</div><div style='padding:18px;text-align:right;'>[הכנס כאן את המלל שלך]</div>`;
+        headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       } else if(page === 'contact') {
         html = `<div class='main-text'>פנייה למפקד קריית ההדרכה</div>
         <form style='max-width:350px;margin:0 auto;padding:18px;text-align:right;'>
@@ -315,14 +493,21 @@
           <label>הפנייה:<br><textarea name='message' required style='width:100%;height:90px;'></textarea></label><br>
           <button type='submit' style='margin-top:12px;width:100%;background:#2a6cff;color:#fff;border:none;padding:10px 0;border-radius:8px;font-size:1.1em;'>שלח</button>
         </form>`;
+        headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       } else {
-        // דף הבית
+        // Home page (default content)
         html = `<div class='main-text'>בונים ערך - מובילים דרך</div>
         <div class='main-img-link'><a href='https://docs.google.com/forms/d/e/1FAIpQLScXZaFGxVH75YVr_uKBnFj2KpgpLz_pgOGFZESSqo_8ldO9jg/viewform?usp=header' target='_blank'><img src='php.jpg' alt='תמונה ראשית' class='main-img'></a></div>
-        <div class='video-container'><video controls src='ser.mp4'></video></div>`;
+        <div class='video-container'><video controls src='serhp.mp4'></video></div>`;
+        headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       }
       document.getElementById('main-content').innerHTML = html;
     }
+
+    // Load home page content on initial load
+    document.addEventListener('DOMContentLoaded', () => {
+      showPage('home');
+    });
   </script>
 </body>
 </html>
