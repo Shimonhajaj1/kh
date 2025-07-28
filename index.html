@@ -8,7 +8,7 @@
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background: #f7f7f7;
+      background: #fff; /* רקע לבן */
       direction: rtl;
     }
     .header {
@@ -16,8 +16,10 @@
       justify-content: space-between;
       align-items: center;
       padding: 16px 12px 8px 12px;
-      background: #fff;
+      background: #f2f2f2; /* אפור חלש */
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      position: relative;
+      z-index: 2;
     }
     .logo {
       width: 44px;
@@ -73,30 +75,234 @@
         max-width: 98vw;
       }
     }
+    /* --- Drawer styles --- */
+    .drawer-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; right: 0; bottom: 0; left: 0;
+      background: rgba(0,0,0,0.25);
+      z-index: 10;
+    }
+    .drawer {
+      position: fixed;
+      top: 0; right: 0;
+      width: 80vw;
+      max-width: 320px;
+      height: 100vh;
+      background: #fff;
+      box-shadow: -2px 0 12px rgba(0,0,0,0.13);
+      z-index: 11;
+      transform: translateX(100%);
+      transition: transform 0.25s;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+    .drawer.open {
+      transform: translateX(0);
+    }
+    .drawer-header {
+      padding: 18px 18px 8px 18px;
+      font-size: 1.1em;
+      font-weight: bold;
+      border-bottom: 1px solid #eee;
+      background: #f2f2f2;
+    }
+    .drawer-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .drawer-list > li {
+      border-bottom: 1px solid #f3f3f3;
+    }
+    .drawer-link, .drawer-expand {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 14px 20px;
+      background: none;
+      border: none;
+      font-size: 1em;
+      text-align: right;
+      cursor: pointer;
+      color: #222;
+      outline: none;
+      transition: background 0.13s;
+    }
+    .drawer-link:hover, .drawer-expand:hover {
+      background: #f7f7f7;
+    }
+    .drawer-expand .arrow {
+      margin-right: 8px;
+      font-size: 1.1em;
+      transition: transform 0.2s;
+    }
+    .drawer-expand[aria-expanded="true"] .arrow {
+      transform: rotate(90deg);
+    }
+    .drawer-sublist {
+      list-style: none;
+      margin: 0;
+      padding: 0 0 0 18px;
+      background: #fafafa;
+    }
+    .drawer-sublist li {
+      border-bottom: 1px solid #f3f3f3;
+    }
+    .drawer-sublink {
+      display: block;
+      width: 100%;
+      padding: 12px 32px;
+      background: none;
+      border: none;
+      font-size: 0.97em;
+      text-align: right;
+      cursor: pointer;
+      color: #444;
+      outline: none;
+      transition: background 0.13s;
+    }
+    .drawer-sublink:hover {
+      background: #f0f0f0;
+    }
+    .drawer-footer {
+      margin-top: auto;
+      padding: 18px 20px;
+      border-top: 1px solid #eee;
+      background: #fafafa;
+    }
+    .drawer-close {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      color: #888;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div class="header">
-    <!-- כפתור תפריט (בצד ימין) -->
-    <button class="menu-btn" aria-label="תפריט">☰</button>
-    <!-- לוגו (בצד שמאל): החלף את src לכתובת הלוגו שלך -->
-    <img src="logo.png" alt="לוגו" class="logo">
-  </div>
-
-  <div class="main-text">בונים ערך - מובילים דרך</div>
-
-  <div class="main-img-link">
-    <!-- החלף את href לכתובת הרצויה, ואת src לכתובת התמונה שלך -->
-    <a href="https://example.com" target="_blank">
-      <img src="php.jpg" alt="תמונה ראשית" class="main-img">
+    <button class="menu-btn" aria-label="תפריט" onclick="openDrawer()">☰</button>
+    <a href="#" onclick="showPage('home'); return false;">
+      <img src="logo.png" alt="לוגו" class="logo">
     </a>
   </div>
 
-  <div class="video-container">
-    <!-- אפשרות 1: וידאו מקומי -->
-    <video controls src="ser.mp4"></video>
-    <!-- אפשרות 2: קישור ליוטיוב (החלף את הכתובת) -->
-    <!-- <iframe src="https://www.youtube.com/embed/XXXXXXXXXXX" frameborder="0" allowfullscreen></iframe> -->
+  <!-- Drawer (Side Menu) -->
+  <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeDrawer()"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="סגור">×</button>
+    <div class="drawer-header">תפריט</div>
+    <ul class="drawer-list">
+      <li><button class="drawer-link" onclick="showPage('commander')">דבר המפקד</button></li>
+      <li>
+        <button class="drawer-expand" onclick="toggleSubMenu('units')" aria-expanded="false">יחידות בקריית ההדרכה <span class="arrow">▶</span></button>
+        <ul class="drawer-sublist" id="submenu-units" style="display:none">
+          <li><button class="drawer-sublink" onclick="showPage('unit6')">בה"ד 6</button></li>
+          <li><button class="drawer-sublink" onclick="showPage('unit7')">בה"ד 7</button></li>
+          <li><button class="drawer-sublink" onclick="showPage('unit10')">בה"ד 10</button></li>
+          <li><button class="drawer-sublink" onclick="showPage('unit11')">בה"ד 11</button></li>
+        </ul>
+      </li>
+      <li>
+        <button class="drawer-expand" onclick="toggleSubMenu('info')" aria-expanded="false">מידע למשרת <span class="arrow">▶</span></button>
+        <ul class="drawer-sublist" id="submenu-info" style="display:none">
+          <li><button class="drawer-sublink" onclick="showPage('tikshuv')">תקשוב</button></li>
+          <li><button class="drawer-sublink" onclick="showPage('transport')">היסעים</button></li>
+          <li><button class="drawer-sublink" onclick="showPage('medicine')">רפואה</button></li>
+          <li><button class="drawer-sublink" onclick="showPage('food')">הסעדה</button></li>
+          <li><button class="drawer-sublink" onclick="showPage('security')">בטחון מידע</button></li>
+        </ul>
+      </li>
+      <li><button class="drawer-link" onclick="showPage('map')">מפת קריית ההדרכה</button></li>
+      <li><button class="drawer-link" onclick="showPage('simulation')">סימולציית קליטה</button></li>
+      <li><button class="drawer-link" onclick="showPage('rights')">זכויות למשרת</button></li>
+    </ul>
+    <div class="drawer-footer">
+      <button class="drawer-link" style="width:100%;background:#2a6cff;color:#fff;border-radius:8px;" onclick="showPage('contact')">פנייה למפקד קריית ההדרכה</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div id="main-content">
+    <div class="main-text">בונים ערך - מובילים דרך</div>
+    <div class="main-img-link">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScXZaFGxVH75YVr_uKBnFj2KpgpLz_pgOGFZESSqo_8ldO9jg/viewform?usp=header" target="_blank">
+        <img src="php.jpg" alt="תמונה ראשית" class="main-img">
+      </a>
+    </div>
+    <div class="video-container">
+      <video controls src="ser.mp4"></video>
+    </div>
   </div>
+
+  <script>
+    // Drawer open/close
+    function openDrawer() {
+      document.getElementById('drawer').classList.add('open');
+      document.getElementById('drawer-backdrop').style.display = 'block';
+    }
+    function closeDrawer() {
+      document.getElementById('drawer').classList.remove('open');
+      document.getElementById('drawer-backdrop').style.display = 'none';
+    }
+    // Toggle submenus
+    function toggleSubMenu(menu) {
+      const submenu = document.getElementById('submenu-' + menu);
+      const btn = submenu.parentElement.querySelector('.drawer-expand');
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', !expanded);
+      submenu.style.display = expanded ? 'none' : 'block';
+    }
+    // Show page content
+    function showPage(page) {
+      closeDrawer();
+      let html = '';
+      if(page === 'commander') {
+        html = `<div style="text-align:center;margin:32px 0;"><img src="commander.jpg" alt="דבר המפקד" style="max-width:90vw;border-radius:18px;"></div>`;
+      } else if(page === 'unit6') {
+        html = `<div class='main-text'>בה"ד 6</div>`;
+      } else if(page === 'unit7') {
+        html = `<div class='main-text'>בה"ד 7</div>`;
+      } else if(page === 'unit10') {
+        html = `<div class='main-text'>בה"ד 10</div>`;
+      } else if(page === 'unit11') {
+        html = `<div class='main-text'>בה"ד 11</div>`;
+      } else if(page === 'tikshuv') {
+        html = `<div class='main-text'>תקשוב</div>`;
+      } else if(page === 'transport') {
+        html = `<div class='main-text'>היסעים</div>`;
+      } else if(page === 'medicine') {
+        html = `<div class='main-text'>רפואה</div>`;
+      } else if(page === 'food') {
+        html = `<div class='main-text'>הסעדה</div>`;
+      } else if(page === 'security') {
+        html = `<div class='main-text'>בטחון מידע</div>`;
+      } else if(page === 'map') {
+        html = `<div style="text-align:center;margin:32px 0;"><img src="map.jpg" alt="מפת קריית ההדרכה" style="max-width:90vw;border-radius:18px;"></div>`;
+      } else if(page === 'simulation') {
+        html = `<div class='video-container'><video controls src="simulation.mp4" style="width:85vw;max-width:350px;"></video></div>`;
+      } else if(page === 'rights') {
+        html = `<div class='main-text'>זכויות למשרת</div><div style='padding:18px;text-align:right;'>[הכנס כאן את המלל שלך]</div>`;
+      } else if(page === 'contact') {
+        html = `<div class='main-text'>פנייה למפקד קריית ההדרכה</div>
+        <form style='max-width:350px;margin:0 auto;padding:18px;text-align:right;'>
+          <label>שם (אופציונלי):<br><input type='text' name='name' style='width:100%;margin-bottom:12px;'></label><br>
+          <label>הפנייה:<br><textarea name='message' required style='width:100%;height:90px;'></textarea></label><br>
+          <button type='submit' style='margin-top:12px;width:100%;background:#2a6cff;color:#fff;border:none;padding:10px 0;border-radius:8px;font-size:1.1em;'>שלח</button>
+        </form>`;
+      } else {
+        // דף הבית
+        html = `<div class='main-text'>בונים ערך - מובילים דרך</div>
+        <div class='main-img-link'><a href='https://docs.google.com/forms/d/e/1FAIpQLScXZaFGxVH75YVr_uKBnFj2KpgpLz_pgOGFZESSqo_8ldO9jg/viewform?usp=header' target='_blank'><img src='php.jpg' alt='תמונה ראשית' class='main-img'></a></div>
+        <div class='video-container'><video controls src='ser.mp4'></video></div>`;
+      }
+      document.getElementById('main-content').innerHTML = html;
+    }
+  </script>
 </body>
 </html> 
