@@ -21,11 +21,19 @@
       position: relative;
       z-index: 2;
     }
+    .logo-container { /* קונטיינר חדש ללוגו כדי למרכז אותו */
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      position: absolute; /* מיקום אבסולוטי כדי לאפשר מרכוז */
+      left: 0;
+      right: 0;
+    }
     .logo {
-      width: 44px;
-      height: 44px;
+      width: 60px; /* הוגדל מ-44px */
+      height: 60px; /* הוגדל מ-44px */
       object-fit: contain;
-      border-radius: 8px;
+      border-radius: 50%; /* שונה מ-8px לעיגול */
       background: #eee;
     }
     .menu-btn {
@@ -34,6 +42,8 @@
       font-size: 28px;
       cursor: pointer;
       color: #333;
+      position: relative; /* נשאר בצד */
+      z-index: 1; /* לוודא שהוא מעל הלוגו אם יש חפיפה */
     }
     .main-text {
       text-align: center;
@@ -66,7 +76,7 @@
     }
     video, iframe {
       width: 85vw;
-      max-width: 350px;
+      max-width: 500px; /* הוגדל מ-350px */
       border-radius: 16px;
       background: #000;
     }
@@ -187,25 +197,28 @@
 <body>
   <div class="header">
     <button class="menu-btn" aria-label="תפריט" onclick="openDrawer()">☰</button>
-    <a href="#" onclick="showPage('home'); return false;">
-      <img src="logo.png" alt="לוגו" class="logo">
-    </a>
+    <div class="logo-container"> <a href="#" onclick="showPage('home'); return false;">
+        <img src="logo.png" alt="לוגו" class="logo">
+      </a>
+    </div>
   </div>
 
-  <!-- Drawer (Side Menu) -->
   <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeDrawer()"></div>
   <nav class="drawer" id="drawer">
     <button class="drawer-close" onclick="closeDrawer()" aria-label="סגור">×</button>
-    <div class="drawer-header">תפריט</div>
     <ul class="drawer-list">
       <li><button class="drawer-link" onclick="showPage('commander')">דבר המפקד</button></li>
       <li>
         <button class="drawer-expand" onclick="toggleSubMenu('units')" aria-expanded="false">יחידות בקריית ההדרכה <span class="arrow">▶</span></button>
         <ul class="drawer-sublist" id="submenu-units" style="display:none">
+          <li><button class="drawer-sublink" onclick="showPage('unit_mifkada')">מפקדה</button></li>
           <li><button class="drawer-sublink" onclick="showPage('unit6')">בה"ד 6</button></li>
           <li><button class="drawer-sublink" onclick="showPage('unit7')">בה"ד 7</button></li>
           <li><button class="drawer-sublink" onclick="showPage('unit10')">בה"ד 10</button></li>
           <li><button class="drawer-sublink" onclick="showPage('unit11')">בה"ד 11</button></li>
+          <li><button class="drawer-sublink" onclick="showPage('unit13')">בה"ד 13</button></li>
+          <li><button class="drawer-sublink" onclick="showPage('unit20')">בה"ד 20</button></li>
+          <li><button class="drawer-sublink" onclick="showPage('unit_hinuch')">בה"ד חינוך</button></li>
         </ul>
       </li>
       <li>
@@ -227,7 +240,6 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
   <div id="main-content">
     <div class="main-text">בונים ערך - מובילים דרך</div>
     <div class="main-img-link">
@@ -263,7 +275,9 @@
       closeDrawer();
       let html = '';
       if(page === 'commander') {
-        html = `<div style="text-align:center;margin:32px 0;"><img src="commander.jpg" alt="דבר המפקד" style="max-width:90vw;border-radius:18px;"></div>`;
+        html = `<div style="text-align:center;margin:32px 0;"><img src="dvar.jpg" alt="דבר המפקד" style="max-width:90vw;border-radius:18px;"></div>`;
+      } else if(page === 'unit_mifkada') {
+        html = `<div class='main-text'>מפקדה</div>`;
       } else if(page === 'unit6') {
         html = `<div class='main-text'>בה"ד 6</div>`;
       } else if(page === 'unit7') {
@@ -272,6 +286,12 @@
         html = `<div class='main-text'>בה"ד 10</div>`;
       } else if(page === 'unit11') {
         html = `<div class='main-text'>בה"ד 11</div>`;
+      } else if(page === 'unit13') {
+        html = `<div class='main-text'>בה"ד 13</div>`;
+      } else if(page === 'unit20') {
+        html = `<div class='main-text'>בה"ד 20</div>`;
+      } else if(page === 'unit_hinuch') {
+        html = `<div class='main-text'>בה"ד חינוך</div>`;
       } else if(page === 'tikshuv') {
         html = `<div class='main-text'>תקשוב</div>`;
       } else if(page === 'transport') {
@@ -285,7 +305,7 @@
       } else if(page === 'map') {
         html = `<div style="text-align:center;margin:32px 0;"><img src="map.jpg" alt="מפת קריית ההדרכה" style="max-width:90vw;border-radius:18px;"></div>`;
       } else if(page === 'simulation') {
-        html = `<div class='video-container'><video controls src="simulation.mp4" style="width:85vw;max-width:350px;"></video></div>`;
+        html = `<div class='video-container'><video controls src="ser.mp4" style="width:85vw;max-width:500px;"></video></div>`;
       } else if(page === 'rights') {
         html = `<div class='main-text'>זכויות למשרת</div><div style='padding:18px;text-align:right;'>[הכנס כאן את המלל שלך]</div>`;
       } else if(page === 'contact') {
@@ -305,4 +325,4 @@
     }
   </script>
 </body>
-</html> 
+</html>
