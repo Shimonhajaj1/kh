@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>בונים ערך - מובילים דרך</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: #f7f7f7;
+      direction: rtl;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 12px 8px 12px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .logo {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #eee;
+    }
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #333;
+    }
+    .main-text {
+      text-align: center;
+      font-size: 1.3em;
+      font-weight: bold;
+      margin: 32px 0 18px 0;
+      color: #2a2a2a;
+      letter-spacing: 1px;
+    }
+    .main-img-link {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+    .main-img {
+      width: 85vw;
+      max-width: 350px;
+      border-radius: 22px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .main-img:active {
+      transform: scale(0.97);
+    }
+    .video-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    video, iframe {
+      width: 85vw;
+      max-width: 350px;
+      border-radius: 16px;
+      background: #000;
+    }
+    @media (max-width: 400px) {
+      .main-img, video, iframe {
+        max-width: 98vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <!-- כפתור תפריט (בצד ימין) -->
+    <button class="menu-btn" aria-label="תפריט">☰</button>
+    <!-- לוגו (בצד שמאל): החלף את src לכתובת הלוגו שלך -->
+    <img src="logo.png" alt="לוגו" class="logo">
+  </div>
+
+  <div class="main-text">בונים ערך - מובילים דרך</div>
+
+  <div class="main-img-link">
+    <!-- החלף את href לכתובת הרצויה, ואת src לכתובת התמונה שלך -->
+    <a href="https://example.com" target="_blank">
+      <img src="php.jpg" alt="תמונה ראשית" class="main-img">
+    </a>
+  </div>
+
+  <div class="video-container">
+    <!-- אפשרות 1: וידאו מקומי -->
+    <video controls src="ser.mp4"></video>
+    <!-- אפשרות 2: קישור ליוטיוב (החלף את הכתובת) -->
+    <!-- <iframe src="https://www.youtube.com/embed/XXXXXXXXXXX" frameborder="0" allowfullscreen></iframe> -->
+  </div>
+</body>
+</html> 
