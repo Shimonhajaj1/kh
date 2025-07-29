@@ -89,8 +89,8 @@
       margin: 32px 0;
     }
     .image-grid img {
-      width: 85vw;
-      max-width: 350px; /* Same max-width as main-img */
+      width: 100%; /* שינוי ל-100% כדי שיפרסו על כל רוחב הקונטיינר */
+      max-width: 500px; /* הוספת max-width הגיוני למניעת התרחבות יתר במסכים גדולים */
       border-radius: 18px; /* Consistent border-radius */
       box-shadow: 0 4px 16px rgba(0,0,0,0.08); /* Consistent shadow */
     }
@@ -445,7 +445,6 @@
 
 
       if(page === 'commander') {
-        // השינוי נמצא כאן: max-width: 100vw
         html = `<div style="text-align:center;margin:32px 0;"><img src="dvar.jpg" alt="דבר המפקד" style="max-width:100vw;border-radius:18px;"></div>`;
         headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       } else if(page.startsWith('unit')) { // Handle all unit pages using the helper function
@@ -466,20 +465,29 @@
                   <img src="tikshuv2.png" alt="תמונת תקשוב 2">
                 </div>`;
         headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
-      } else if(page === 'transport') {
-        html = `<div class='main-text'>היסעים</div><div style='padding:18px;text-align:right;'>[הכנס כאן את המידע על היסעים]</div>`;
+      }
+      // שינוי עבור היסעים
+      else if(page === 'transport') {
+        html = `<div class='main-text'>היסעים</div><div style="text-align:center;margin:32px 0;"><img src="hiseam.jpg" alt="תמונת היסעים" style="max-width:100vw;border-radius:18px;"></div>`;
         headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
-      } else if(page === 'medicine') {
-        html = `<div class='main-text'>רפואה</div><div style='padding:18px;text-align:right;'>[הכנס כאן את המידע על רפואה]</div>`;
+      }
+      // שינוי עבור רפואה
+      else if(page === 'medicine') {
+        html = `<div class='main-text'>רפואה</div><div style="text-align:center;margin:32px 0;"><img src="rpuha.jpg" alt="תמונת רפואה" style="max-width:100vw;border-radius:18px;"></div>`;
         headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
-      } else if(page === 'food') {
-        html = `<div class='main-text'>הסעדה</div><div style='padding:18px;text-align:right;'>[הכנס כאן את המידע על הסעדה]</div>`;
+      }
+      // שינוי עבור הסעדה
+      else if(page === 'food') {
+        html = `<div class='main-text'>הסעדה</div><div style="text-align:center;margin:32px 0;"><img src="hsada.jpg" alt="תמונת הסעדה" style="max-width:100vw;border-radius:18px;"></div>`;
         headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
-      } else if(page === 'security') {
+      }
+      else if(page === 'security') {
         html = `<div class='main-text'>בטחון מידע</div><div style='padding:18px;text-align:right;'>[הכנס כאן את המידע על בטחון מידע]</div>`;
         headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
-      } else if(page === 'map') {
-        html = `<div style="text-align:center;margin:32px 0;"><img src="map.jpg" alt="מפת קריית ההדרכה" style="max-width:90vw;border-radius:18px;"></div>`;
+      }
+      // שינוי עבור מפת קריית ההדרכה
+      else if(page === 'map') {
+        html = `<div style="text-align:center;margin:32px 0;"><img src="map.jpg" alt="מפת קריית ההדרכה" style="max-width:100vw;border-radius:18px;"></div>`;
         headerLogo.src = defaultLogoSrc; // חזרה ללוגו הכללי
       } else if(page === 'simulation') {
         html = `<div class='video-container'><video controls src='ser.mp4' style="width:85vw;max-width:500px;"></video></div>`;
